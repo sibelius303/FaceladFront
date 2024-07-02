@@ -60,7 +60,7 @@ export const ClientTable: React.FC<ClientProps> = ({ clients }) => {
     const [input, setInput] = useState("");
     const [selectAct, setSelectAct] = useState("");
     const [selectPay, setSelectPay] = useState("");
-    const [data, setData] = useState<any>(clients);
+    const [data, setData] = useState<any>([]);
     const [open, setOpen] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +70,8 @@ export const ClientTable: React.FC<ClientProps> = ({ clients }) => {
     console.log("soy el objeto de cliente", clients)
 
     useEffect(() => {
-        setData(clients)
+        if (clients !== null) setData(clients)
+        return
     }, [clients])
 
     const handleSearch = () => {
@@ -85,21 +86,26 @@ export const ClientTable: React.FC<ClientProps> = ({ clients }) => {
         }
     }
 
+    console.log(data)
+
     useEffect(() => {
-        if (input === "") {
-            setData(clients)
-            console.log(clients)
+        if (clients !== null) {
+            if (input === "") {
+                setData(clients)
+                console.log(clients)
 
-        } else {
-            setData(clients?.filter(el => el.name.toLowerCase().startsWith(input.toLowerCase()) || el.company.toLowerCase().startsWith(input.toLowerCase())))
+            } else {
+                setData(clients?.filter(el => el.name.toLowerCase().startsWith(input.toLowerCase()) || el.company.toLowerCase().startsWith(input.toLowerCase())))
+            }
         }
-
     }, [input, clients])
 
     useEffect(() => {
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        setCurrentItems(data?.slice(indexOfFirstItem, indexOfLastItem))
+        if (data?.length > 0) {
+            const indexOfLastItem = currentPage * itemsPerPage;
+            const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+            setCurrentItems(data?.slice(indexOfFirstItem, indexOfLastItem))
+        }
     }, [data, currentPage])
 
     console.log("soy el input", input)
@@ -167,19 +173,19 @@ export const ClientTable: React.FC<ClientProps> = ({ clients }) => {
                     {currentItems?.length > 0 ? <><div className="w-full text-sm text-left rtl:text-right text-gray-500  ">
                         <div className="text-xs text-gray-400 border-b border-t bg-gray-50 mb-4 ">
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-                                <div  className="px-6 py-3 text-black lg:col-span-2 text-center">
+                                <div className="px-6 py-3 text-black lg:col-span-2 text-center">
                                     Clientes
                                 </div>
-                                <div  className="hidden lg:inline-block px-6 py-3 text-center">
+                                <div className="hidden lg:inline-block px-6 py-3 text-center">
                                     Descripción
                                 </div>
-                                <div  className="px-6 py-3 text-center">
+                                <div className="px-6 py-3 text-center">
                                     Actividad
                                 </div>
-                                <div  className="hidden lg:inline-block px-6 py-3 text-center">
+                                <div className="hidden lg:inline-block px-6 py-3 text-center">
                                     Facturación
                                 </div>
-                                <div  className="hidden md:inline-block px-6 py-3 text-center">
+                                <div className="hidden md:inline-block px-6 py-3 text-center">
                                     Acciones
                                 </div>
                             </div>
@@ -255,7 +261,7 @@ export const ClientTable: React.FC<ClientProps> = ({ clients }) => {
                 </div>
             </div>
             <div className='hidden lg:block w-1/4 h-full'>
-                <FilterComponent handleSearch={handleSearch} selectAct={selectAct} setSelectAct={setSelectAct} selectPay={selectPay} setSelectPay={setSelectPay} setOpen={setOpen}/>
+                <FilterComponent handleSearch={handleSearch} selectAct={selectAct} setSelectAct={setSelectAct} selectPay={selectPay} setSelectPay={setSelectPay} setOpen={setOpen} />
             </div>
             <ToastContainer />
             {

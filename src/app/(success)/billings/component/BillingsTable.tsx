@@ -127,13 +127,16 @@ export const BillingsTable: React.FC<BillingsProps> = ({ billings }) => {
 
 
     useEffect(() => {
-        setData(billings)
+        if (billings !== null) setData(billings)
+        return
     }, [billings])
 
     useEffect(() => {
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        setCurrentItems(data.slice(indexOfFirstItem, indexOfLastItem))
+        if (data?.length > 0) {
+            const indexOfLastItem = currentPage * itemsPerPage;
+            const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+            setCurrentItems(data.slice(indexOfFirstItem, indexOfLastItem))
+        }
     }, [data, currentPage])
 
     const handleRowClicked = (row: BillingInfo) => {

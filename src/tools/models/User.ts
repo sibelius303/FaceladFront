@@ -19,7 +19,7 @@ export default class User {
             return await response.json();
         } catch(error: any) {
             console.log("soy el error del login", error)
-            return null;
+            return error;
         }
     }
 

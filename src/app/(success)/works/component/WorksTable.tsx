@@ -65,7 +65,7 @@ export const WorksTable: React.FC<WorkTableProps> = ({ works }) => {
     const [selectMng, setSelectMgm] = useState("");
     const [selectPriority, setSelectPriotity] = useState("");
     const [inputId, setInputId] = useState("");
-    const [data, setData] = useState<any>(works);
+    const [data, setData] = useState<any>([]);
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
@@ -76,18 +76,20 @@ export const WorksTable: React.FC<WorkTableProps> = ({ works }) => {
 
 
     useEffect(() => {
-        setData(works)
+        if (works !== null) setData(works)
+        return
     }, [works])
 
     useEffect(() => {
-        if (input === "") {
-            setData(works)
-            console.log(works)
+        if (works !== null) {
+            if (input === "") {
+                setData(works)
+                console.log(works)
 
-        } else {
-            setData(works?.filter(el => el.name.toLowerCase().startsWith(input.toLowerCase())))
+            } else {
+                setData(works?.filter(el => el.name.toLowerCase().startsWith(input.toLowerCase())))
+            }
         }
-
     }, [input, works])
 
     const handleSearch = () => {
@@ -117,9 +119,11 @@ export const WorksTable: React.FC<WorkTableProps> = ({ works }) => {
     }
 
     useEffect(() => {
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        setCurrentItems(data.slice(indexOfFirstItem, indexOfLastItem))
+        if (data?.length > 0) {
+            const indexOfLastItem = currentPage * itemsPerPage;
+            const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+            setCurrentItems(data.slice(indexOfFirstItem, indexOfLastItem))
+        }
     }, [data, currentPage])
 
     const handleRowClicked = (row: DataItem) => {
@@ -190,19 +194,19 @@ export const WorksTable: React.FC<WorkTableProps> = ({ works }) => {
                     {currentItems?.length > 0 ? <div className="w-full text-sm text-left rtl:text-right text-gray-500  ">
                         <div className="text-xs text-gray-400 border-b border-t bg-gray-50 mb-4 ">
                             <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-6">
-                                <div  className="px-6 py-3 text-black md:col-span-2">
+                                <div className="px-6 py-3 text-black md:col-span-2">
                                     Cliente
                                 </div>
-                                <div  className="hidden md:inline-block px-6 py-3">
+                                <div className="hidden md:inline-block px-6 py-3">
                                     Estatus
                                 </div>
-                                <div  className="hidden md:inline-block px-6 py-3">
+                                <div className="hidden md:inline-block px-6 py-3">
                                     Prioridad
                                 </div>
-                                <div  className="hidden xl:inline-block px-6 py-3">
+                                <div className="hidden xl:inline-block px-6 py-3">
                                     Encargado
                                 </div>
-                                <div  className="hidden xl:inline-block px-6 py-3">
+                                <div className="hidden xl:inline-block px-6 py-3">
                                     Acciones
                                 </div>
                             </div>

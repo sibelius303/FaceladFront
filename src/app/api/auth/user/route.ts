@@ -9,6 +9,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const username = form.get('username');
         const password = form.get('password');
         const data = await User.login(username as string, password as string);
+        console.log(data)
         if (data === null || !data || data.detail || data.error) {
             const url = new URL(ROUTER_PATH.LOGIN, request.url);
             return NextResponse.redirect(url, { status: 303 });
